@@ -30,6 +30,8 @@ function IndexUpdateDialog(){
 	this.ui.progressLabel.text='';
 	this.ui.progressBar.text='';
 	this.ui.progressBar.value=0;	
+	Amarok.debug(QDialogButtonBox.StandardButton('Cancel'));
+	this.ui.buttonBox.button(QDialogButtonBox.Cancel).text='Finish later';
 }
 
 
