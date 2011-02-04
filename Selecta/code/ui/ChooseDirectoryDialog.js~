@@ -1,0 +1,23 @@
+function ChooseDirectoryDialog(){
+	var ui_loader = new QUiLoader(this);
+	var ui_file = new QFile(Amarok.Info.scriptPath()+'/code/ui/choose_directory_dialog.ui');
+	
+	ui_file.open(QIODevice.ReadOnly);
+	this.ui=ui_loader.load(ui_file,this);
+	ui_file.close();		
+	this.ui.locationEdit.text=(new QDir('Selecta')).absolutePath();	
+	this.ui.locationChooseButton['clicked'].connect(this,'chooseDir');
+}
+
+ChooseDirectoryDialog.prototype.chooseDir=function(){
+	var file_dialog=new QFileDialog(this);
+	file_dialog.fileMode=QFileDialog.Directory;
+	file_dialog.modal=true;	
+	file_dialog.exec();
+	
+	if(file_dialog.result()==QDialog.Accepted){
+		var selected_dir=file_dialog.selectedFiles()[0];
+		this.ui.locationEdit.text=selected_dir;
+	}	
+}
+

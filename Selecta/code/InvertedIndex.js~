@@ -1,0 +1,149 @@
+function Index(){}
+
+
+Index.prototype.buildFromFile=function(filePath){
+	this.loadData(filePath);
+	this.buildIndex();	
+}
+
+Index.prototype.loadData=function(filePath){
+	var inFile=new QFile(filePath);
+	inFile.open(new QIODevice.OpenMode(QIODevice.ReadOnly));
+	var instream=new QTextStream(inFile);
+	
+	this.artistTags=new Object();
+	this.nArtists=0;
+	var state='artist';
+	var currArtist='';
+	var compareFunction=function(a,b){
+		if(a[0]<b[0])return -1;
+		if(a[0]>b[0])return 1;
+		if(a[1]<b[1])return -1;
+		if(a[1]>b[1])return 1;
+		return 0;
+	}
+	
+	while(!instream.atEnd()){
+		var line=instream.readLine();
+		
+		if(state=='artist'){
+			this.artistTags[line]=new Array();
+			this.nArtists+=1;
+			currArtist=line;
+			state='tags';
+		}
+		else{
+			if(line.length==0){
+				state='artist'
+				this.artistTags[currArtist].sort(compareFunction)
+			}
+			else{
+				line=line.split('\t');
+				var w=parseInt(line[0]);
+				var t=line[1].trim();
+				var l=this.artistTags[currArtist];
+				l[l.length]=[t,w]
+			}			
+		}		
+	}
+}
+
+Index.prototype.buildIndex=function(){
+	this.invind=new Object();
+	for(var a in this.artistTags){
+		for(var i in this.artistTags[a]){
+			var t=this.artistTags[a][i][0];
+			if(t in this.invind){
+				var l=this.invind[t];
+				l[l.length]=a;
+			}
+			else{
+				this.invind[t]=[a];
+			}			
+		}		
+	}
+}
+
+Index.prototype.cosineSimilarity=function(a,b){
+	var NA=this.nArtists*1.0;
+	var tfa=[];
+	var tfb=[];
+	var idfa=[];
+	var idfb=[];
+	for(var i in a){
+		tfa[i]=a[i][1]/100.0;
+		idfa[i]=Math.log(NA/this.invind[a[i][0]].length)
+	}	
+	for(var i in b){
+		tfb[i]=b[i][1]/100.0;
+		idfb[i]=Math.log(NA/this.invind[b[i][0]].length)
+	}
+		
+	var va=new Array(tfa.length);
+	for(var i in tfa){
+		va[i]=tfa[i]*idfa[i];
+	}
+	var vb=new Array(tfb.length);
+	for(var i in tfb){
+		vb[i]=tfb[i]*idfb[i];
+	}
+	
+	var norm=function(vect){
+		var s=0;
+		for(var i in vect){
+			s+=vect[i]*vect[i];
+		}
+		return Math.sqrt(s);
+	};
+	
+	var moda=norm(va);
+	var modb=norm(vb);
+	var inda=0;
+	var indb=0;
+	var sim=0;
+		
+	while(inda<va.length && indb<vb.length){	
+		if(a[inda][0]<b[indb][0]){
+			inda+=1;
+		}
+		else if(b[indb][0]<a[inda][0]){
+			indb+=1;
+		}
+		else{
+			sim+=va[inda]*vb[indb]/moda/modb;
+			inda+=1;
+			indb+=1;
+		}
+	}
+	return sim;	
+}
+
+Index.prototype.findSimilar=function(artistName){
+	//query is an array of pairs (tag_name, tag_weight)
+		
+	var query=this.artistTags[artistName];
+	if(query==null){
+		//no such artist
+		return [];		
+	}
+	var done=new Object();	
+	var res=new Heap();
+	
+	for(var i in query){
+		var tag=query[i];
+		var tagname=tag[0];
+		var postingList=this.invind[tagname];
+		for(var j in postingList){
+			var artistName=postingList[j];
+			var artist=this.artistTags[postingList[j]];
+			if(!(artistName in done)){
+				done[artistName]=1;
+				res.insert([this.cosineSimilarity(query,artist),artistName]);
+			}
+		}
+	}
+	var ret=res.sorted();
+	ret.reverse();
+	return ret;
+}
+

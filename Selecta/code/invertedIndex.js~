@@ -1,0 +1,51 @@
+function InvertedIndex(){}
+
+InvertedIndex.prototype.loadData=function(filePath){
+	var inFile=new QFile(filePath);
+	inFile.open(new QIODevice.OpenMode(QIODevice.ReadOnly));
+	var instream=new QTextStream(inFile);
+	
+	
+	var artistTags=new Object();
+	var state='artist';
+	var currArtist='';
+	while(!instream.atEnd()){
+		var line=instream.readLine();
+		
+		if(state=='artist'){
+			artistTags[line]=new Array();
+			currArtist=line;
+			state='tags';
+		}
+		else{
+			if(line.length==0){
+				state='artist'
+				artistTags[currArtist].sort()
+			}
+			else{
+				line=line.split('\t');
+				var w=parseInt(line[0]);
+				var t=line[1];
+				var l=artistTags[currArtist];
+				l[l.length]=[t,w]
+			}			
+		}		
+	}
+	
+	return artistTags;
+	
+}
+
+
+InvertedIndex.prototype.buildInvertedIndex=function(artistTags){
+	iind=new Object();
+	
+	for(var a in artistTags){
+		Amarok.debug(a);		
+	}
+	
+	
+	
+}
+
+
