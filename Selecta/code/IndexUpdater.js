@@ -84,6 +84,7 @@ IndexUpdater.prototype.update=function(){
 		*/
 		var api=new LastFM('86491ac5225fc6dcc1f04c3502c01189');	
 		
+		var encoder=new QTextEncoder(QTextCodec.codecForName(new QByteArray('UTF-8')));
 		for(var i in need_update){
 			if(this.canceled){
 				break;
@@ -91,7 +92,6 @@ IndexUpdater.prototype.update=function(){
 			try{
 				var artist_name=need_update[i];
 				if(artist_name.length>0){
-					
 					dialog.ui.currentArtistLabel.text=artist_name;					
 					dialog.ui.progressLabel.text=i+'/'+need_update.length;
 					dialog.ui.progressBar.value=i/need_update.length*100;
@@ -99,14 +99,14 @@ IndexUpdater.prototype.update=function(){
 					this.pause(700);	//go easy on last.fm servers					
 					var tags=api.getTopTagsForArtist(artist_name);
 					
-					if(tags.length>0){
-						data_file.write(new QByteArray('\n'));
-						data_file.write(new QByteArray(artist_name+'\n'));
+					if(tags.length>0){						
+						data_file.write(encoder.fromUnicode('\n'));
+						data_file.write(encoder.fromUnicode(artist_name+'\n'));
 						for(var j in tags){
 							if(tags[j][1]==0){
 								break;	//don't want zero weight tags
 							}
-							data_file.write(new QByteArray(tags[j][1]+'\t'+tags[j][0]+'\n'));
+							data_file.write(encoder.fromUnicode(tags[j][1]+'\t'+tags[j][0]+'\n'));
 						}
 						data_file.flush();
 						Amarok.debug('Wrote info for '+artist_name+' to '+data_dir+'/taginfo');
