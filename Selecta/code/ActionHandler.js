@@ -18,6 +18,8 @@
  * 
  */
 
+Importer.include('code/ui/SettingsDialog.js');
+
 function ActionHandler(index){
 	this.index=index;
 }
@@ -42,6 +44,14 @@ ActionHandler.prototype.update_index=function(){
 	updater.update();	
 }
 
-
+ActionHandler.prototype.settings=function(){
+	var settings_dialog=new SettingsDialog();
+	settings_dialog.ui.exec();
+	
+	if(settings_dialog.ui.result()==QDialog.Accepted){
+		settings_dialog.saveConfig();
+	}
+	
+}
 
 

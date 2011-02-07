@@ -68,7 +68,7 @@ Heap.prototype.pop=function(){
 Heap.prototype.replace=function(element){
 	var ret=this.heap[0];
 	this.heap[0]=element;
-	sift_down(0);
+	this.sift_down(0);
 	return ret;
 }
 

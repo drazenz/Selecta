@@ -20,7 +20,6 @@
 
 function LastFM(api_key){
 	this.api_key=api_key;	
-	
 };
 
 LastFM.prototype.encode=function(s){
@@ -38,33 +37,47 @@ LastFM.prototype.encode=function(s){
 	return ret;	
 }
 
+/*
+ * returns:
+ *	- list of pairs (tag_name, tag_weight) for given artist
+ * 	- null if last.fm has no info for given artist
+ * 	- empty list if some other error occured
+ */
 LastFM.prototype.getTopTagsForArtist=function(artist_name){	
-	var url= 'http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist='+this.encode(artist_name)+'&api_key='+this.api_key+'&format=json';
-	var network_manager=new QNetworkAccessManager();
-	var req=new QNetworkRequest(new QUrl(url));
-	var reply=network_manager.get(req);	
-	
-	var event_loop=new QEventLoop();
-	network_manager['finished'].connect(event_loop,'quit');
-	event_loop.exec();
-	
 	try{
+		var url= 'http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist='+this.encode(artist_name)+'&api_key='+this.api_key+'&format=json';
+		var network_manager=new QNetworkAccessManager();
+		var req=new QNetworkRequest(new QUrl(url));
+		var reply=network_manager.get(req);	
+		
+		var event_loop=new QEventLoop();
+		network_manager['finished'].connect(event_loop,'quit');
+		event_loop.exec();
+	
 		var instream=new QTextStream(reply);
 		var result=instream.readAll();
 		var ret=[]		
-		var tags=eval('('+result+')').toptags.tag ;
+
+		result=eval('('+result+')');
+		if('error' in result && result.message=='The artist you supplied could not be found'){
+			return null;
+		}
+		if(!('tag' in result.toptags)){
+			return null;			
+		}
+		if(!Array.isArray(result.toptags.tag)){
+			return null;
+		}
+		var tags=result.toptags.tag;
 		for(var i in tags ){
-			//Amarok.debug(tags[i].name+" / "+tags[i].count);
 			ret[i]=[tags[i].name,parseInt(tags[i].count)];
 		}
-		//Amarok.debug(ret);
 		return ret;	
 	}
 	catch(e){
-		//Amarok.debug(e);
+		Amarok.debug(e);
 		return [];
 	}
 }
-
 
 

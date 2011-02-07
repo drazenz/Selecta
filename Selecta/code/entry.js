@@ -24,19 +24,19 @@ Importer.include('code/ActionHandler.js');
 Importer.include('code/PlaylistGenerator.js');
 Importer.include('code/LastFM.js');
 Importer.include('code/IndexUpdater.js');
+Importer.include('code/SelectaConfig.js');
 
 function entry(){	
 	
-	var data_dir=Amarok.Script.readConfig('selecta-data_dir','');
-	Amarok.debug(data_dir);
+	var data_dir=SelectaConfig.get_data_dir();
 	invIndex=new Index();
 	if(data_dir!=''){
 		dataFilePath=data_dir+'/taginfo';
-		Amarok.debug(dataFilePath);
 		invIndex.buildFromFile(dataFilePath);
 		Amarok.debug('loaded tag data');
 	}
 	setupMenus();	
+	
 }
 
 function setupMenus(){
@@ -46,7 +46,10 @@ function setupMenus(){
 	playAction=selectaMenu.addAction("Play")
 	selectaMenu.addSeparator();
 	update_index_action=selectaMenu.addAction("Update Index");
+	settings_action=selectaMenu.addAction("Settings");
 	var actionHandler=new ActionHandler(invIndex);
 	playAction['triggered'].connect(actionHandler,'play');	
 	update_index_action['triggered'].connect(actionHandler,'update_index');
+	settings_action['triggered'].connect(actionHandler,'settings');
 }
+

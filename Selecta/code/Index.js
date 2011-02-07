@@ -64,12 +64,12 @@ Index.prototype.loadData=function(filePath){
 			state='tags';
 		}
 		else{
-			if(line.length==0){
+			line=line.split('\t')
+			if(line.length<2){
 				state='artist'
 				this.artistTags[currArtist].sort(compareFunction)
 			}
-			else{
-				line=line.split('\t');
+			else{				
 				var w=parseInt(line[0]);
 				var t=line[1].trim();
 				var l=this.artistTags[currArtist];
@@ -151,7 +151,7 @@ Index.prototype.cosineSimilarity=function(a,b){
 	return sim;	
 }
 
-Index.prototype.findSimilar=function(query){
+Index.prototype.findSimilar=function(query, max_n){
 	//query is an array of pairs [tag_name, tag_weight]
 	var compareFunction=function(a,b){
 		if(a[0]<b[0])return -1;
@@ -168,10 +168,10 @@ Index.prototype.findSimilar=function(query){
 	var res=new Heap(
 		function(a,b){
 			if(a[0]!=b[0]){
-				return a[0]>b[0];
+				return a[0]<b[0];
 			}
 			else{
-				return a[1]>b[1];
+				return a[1]<b[1];
 			}			
 		}	
 	);
@@ -184,13 +184,21 @@ Index.prototype.findSimilar=function(query){
 			var artistName=postingList[j];
 			var artist=this.artistTags[postingList[j]];
 			if(!(artistName in done)){
-				done[artistName]=1;
-				res.insert([this.cosineSimilarity(query,artist),artistName]);
+				done[artistName]=1;	
+				if(res.size()<max_n){
+					res.insert([this.cosineSimilarity(query,artist),artistName]);
+				}
+				else{
+					var t=this.cosineSimilarity(query,artist);
+					if(t>res.top()[0]){
+						res.replace([this.cosineSimilarity(query,artist),artistName]);
+					}
+				}
 			}
 		}
 	}
 	var ret=res.sorted();
-	//ret.reverse();
+	ret.reverse();
 	return ret;
 }
 

@@ -42,8 +42,8 @@ PlaylistGenerator.prototype.generateFromAmarokPlaylist=function(){
 		return;
 	}
 	try{
-		//create a query using artists from first 3 songs of the current Amarok playlist
-		for(var i=0;i<3 && i<len;++i){
+		//create a query using artists from first couple of songs of the current Amarok playlist
+		for(var i=0;i<SelectaConfig.get_look_at() && i<len;++i){
 			var artist=Amarok.Playlist.trackAt(i).artist;
 			artist=this.index.artistTags[artist];
 			if(artist!=null){
@@ -57,9 +57,10 @@ PlaylistGenerator.prototype.generateFromAmarokPlaylist=function(){
 		}
 		if(q.length==0){
 			Amarok.alert("Selecta: Can't generate playlist. No info for given artists");
+			return;
 		}
-		similar=this.index.findSimilar(q);
-		playlist_urls=this.generateForSimilar(similar,length=100,sigma=13);	//13 is one handsome number
+		
+		playlist_urls=this.generateForQuery(q,length=SelectaConfig.get_playlist_length(),sigma=SelectaConfig.get_playlist_diversity());
 		
 		return playlist_urls;
 	}
@@ -70,7 +71,7 @@ PlaylistGenerator.prototype.generateFromAmarokPlaylist=function(){
 }
 
 /*
- *	similar is a list of pairs [artist_similarity, artist_name] 
+ *	query is an array of pairs [tag_name, tag_weight]
  *	 
  * 	length is the length of playlist to generate
  * 
@@ -80,8 +81,11 @@ PlaylistGenerator.prototype.generateFromAmarokPlaylist=function(){
  *  	less similar artists to appear in the playlist being created.
  * 
  */
-PlaylistGenerator.prototype.generateForSimilar=function(similar, length, sigma){
-	Amarok.debug(sigma)
+PlaylistGenerator.prototype.generateForQuery=function(query, length, sigma){
+	
+	max_n=Math.ceil(Math.sqrt(-2*sigma*sigma*Math.log(0.01)));	//cut off artist that will surely have likelihood less than 0.01
+	var similar=this.index.findSimilar(query,max_n);		//a list of pairs [artist_similarity, artist_name] 	
+	
 	//generate relative likelihoods for each artist
 	var prob=[];
 	for(var i in similar){
@@ -91,7 +95,6 @@ PlaylistGenerator.prototype.generateForSimilar=function(similar, length, sigma){
 			break;
 		}
 		prob[i]=t;
-		//Amarok.debug(prob[i]+" "+similar[i][1]);
 	}
 	
 	similar.splice(prob.length);	//throw away those artists with zero probability
@@ -171,17 +174,9 @@ PlaylistGenerator.prototype.generateForSimilar=function(similar, length, sigma){
 	}
 				
 	var playlist_urls=new Array(length);
-	
-	for(var i=0;i<Amarok.Playlist.totalTrackCount() && i<1;++i){
-		var track=Amarok.Playlist.trackAt(i);
-		for(var j in track){
-			Amarok.debug(j+" : "+track[j]);
-		}
-	}
-	
+		
 	for(var ind in artist_pl_position){
 		var artist_name=similar[ind][1];
-		Amarok.debug(artist_name);
 		//var q="SELECT DISTINCT url.uniqueid FROM urls url,tracks t, artists a WHERE t.url=url.id AND t.artist IN(SELECT id FROM artists WHERE name='"+artist_name.replace(/'/g,"''")+"')";	//incredibly slow!
 
 		var query_results=[];
@@ -218,6 +213,4 @@ function randInt(max){
 	//generates random int from [0,max]
 	return Math.floor(Math.random()*(max+1));
 }
-
-
 
