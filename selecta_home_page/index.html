@@ -7,7 +7,7 @@
 	<META NAME="AUTHOR" CONTENT="Drazen ">
 	<META NAME="CREATED" CONTENT="20110209;15062500">
 	<META NAME="CHANGEDBY" CONTENT="Drazen ">
-	<META NAME="CHANGED" CONTENT="20110210;32200">
+	<META NAME="CHANGED" CONTENT="20110210;180700">
 	<META NAME="CHANGEDBY" CONTENT="Drazen ">
 	<META NAME="CHANGEDBY" CONTENT="Drazen ">
 	<META NAME="CHANGEDBY" CONTENT="Drazen ">
@@ -89,8 +89,8 @@ the data</SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FA
 </SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">a
 </SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">simple
 </SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">text
-file, an <A HREF="http://en.wikipedia.org/wiki/Inverted_index" TARGET="_blank">inverted
-index</A></SPAN></FONT></FONT></SPAN></P>
+file, an </SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">inverted
+index</SPAN></FONT></FONT></SPAN></P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0cm; font-style: normal; text-decoration: none">
 <FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt">is
 built, mapping tags to artist names. Since last.fm is kind enough to
@@ -102,25 +102,27 @@ weights for each artist, it is quite straightforward to use all these
 data and </FONT></FONT>
 </P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0cm"><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">implement
-<A HREF="http://en.wikipedia.org/wiki/Tf–idf" TARGET="_blank">tf-idf
-retrieval</A>. So, whenever you hit </SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><I>Selecta-&gt;Play,
-</I></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">a
+</SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">a
+retrieval system using tf-idf weighting</SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">.
+So, whenever you hit </SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><I>Selecta-&gt;Play,
+</I></FONT></FONT></SPAN>
+</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0cm"><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">a
 </SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><I>query</I></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none">
 </SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">is
-formed and </SPAN></FONT></FONT></SPAN>
+formed and each artist from your collection is scored against that
+query </SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">by</SPAN></FONT></FONT></SPAN></P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0cm"><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">cosine
+similarity</SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">
+measure.</SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">
+</SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">Finally,
+the appropriate probability distribution over artists is </SPAN></FONT></FONT></SPAN>
 </P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0cm"><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">each
-artist from your collection is scored against that query using <A HREF="http://en.wikipedia.org/wiki/Cosine_similarity" TARGET="_blank">cosine
-similarity</A> measure. </SPAN></FONT></FONT></SPAN>
+<P ALIGN=CENTER STYLE="margin-bottom: 0cm"><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">generated
+and used to select tracks for your playlist. </SPAN></FONT></FONT></SPAN>
 </P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0cm; font-style: normal; text-decoration: none">
-<FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt">Finally,
-the appropriate probability distribution over artists is generated
-and used to select </FONT></FONT>
-</P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0cm"><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">tracks
-for your playlist. If you are still interested, you may want to check
-out </SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><I>Selecta</I></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">'s
+<P ALIGN=CENTER STYLE="margin-bottom: 0cm"><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">If
+you are still interested, you may want to check out </SPAN></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><I>Selecta</I></FONT></FONT></SPAN><SPAN STYLE="text-decoration: none"><FONT FACE="Verdana, sans-serif"><FONT SIZE=2 STYLE="font-size: 11pt"><SPAN STYLE="font-style: normal">'s
 <A HREF="http://github.com/dzaric/Selecta" TARGET="_blank">SOURCE</A>.</SPAN></FONT></FONT></SPAN></P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0cm"><BR>
 </P>
