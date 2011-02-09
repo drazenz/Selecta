@@ -113,13 +113,30 @@ PlaylistGenerator.prototype.generateForQuery=function(query, length, sigma){
 	}
 	
 	//get the number of available songs for artists
-	var n_available=[]
+	var track_counts=[];
 	for(var i in similar){
+		
+		
+		
+	}
+	var n_available=[]
+	for(var i in similar){		
 		var artist_name=similar[i][1];
+
+		//first count the tracks already in playlist
+		var track_cnt=0;
+		for(var j=0;j<Amarok.Playlist.totalTrackCount();++j){
+			if(Amarok.Playlist.trackAt(j).artist==artist_name){
+				++track_cnt;
+			}
+		}		
+		
+		//then count the tracks available from collection
 		var q="SELECT COUNT(id) FROM tracks t WHERE t.artist IN (SELECT id FROM artists WHERE name='"+artist_name.replace(/'/g,"''")+"')";
 		var q=Amarok.Collection.query(q);
+		
 		if(q.length>0){
-			n_available[i]=parseInt(q[0]);
+			n_available[i]=Math.max(0,parseInt(q[0])-track_cnt);
 		}
 		else{
 			n_available[i]=0;
@@ -172,9 +189,16 @@ PlaylistGenerator.prototype.generateForQuery=function(query, length, sigma){
 			a[i2]=tmp;
 		}		
 	}
-				
+
+	var already_in_playlist=new Object();
+	for(var i=0;i<Amarok.Playlist.totalTrackCount();++i){
+		var track=Amarok.Playlist.trackAt(i);
+		var t=track.artist+track.title;
+		already_in_playlist[t]=1;
+	}
+
 	var playlist_urls=new Array(length);
-		
+			
 	for(var ind in artist_pl_position){
 		var artist_name=similar[ind][1];
 		//var q="SELECT DISTINCT url.uniqueid FROM urls url,tracks t, artists a WHERE t.url=url.id AND t.artist IN(SELECT id FROM artists WHERE name='"+artist_name.replace(/'/g,"''")+"')";	//incredibly slow!
@@ -186,13 +210,31 @@ PlaylistGenerator.prototype.generateForQuery=function(query, length, sigma){
 			var artist_id=artist_id[0];
 			var tracks=Amarok.Collection.query("SELECT t.url FROM tracks t WHERE t.artist="+artist_id);
 			for(var t in tracks){
-				query_results[query_results.length]=Amarok.Collection.query("SELECT uniqueid, rpath FROM urls WHERE id="+tracks[t])[0];
+				query_results[query_results.length]=Amarok.Collection.query("SELECT uniqueid, id FROM urls WHERE id="+tracks[t]);
 			}		
 		}				
 		//now we have all songs from artist_name in query_results
 		shuffle(query_results);
+				
+		var q_ind=0;
 		for(var i in artist_pl_position[ind]){
-			playlist_urls[artist_pl_position[ind][i]]=query_results[i];
+			while(q_ind<query_results.length){
+				var q=Amarok.Collection.query("SELECT a.name,t.title FROM tracks t,artists a WHERE t.url="+query_results[q_ind][1]+" AND a.id=t.artist");
+				q=q[0]+q[1];
+				if(q in already_in_playlist){
+					++q_ind;
+				}
+				else{
+					break;
+				}
+			}
+			if(q_ind<query_results.length){
+				playlist_urls[artist_pl_position[ind][i]]=query_results[q_ind][0];
+				++q_ind;
+			}
+			else{
+				break;
+			}
 		}		
 	}
 		
