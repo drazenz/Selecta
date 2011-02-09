@@ -21,7 +21,7 @@
 function SelectaConfig(){}
 
 SelectaConfig.get_playlist_length=function(){
-	return parseInt(Amarok.Script.readConfig('selecta-playlist_length','100'));
+	return parseInt(Amarok.Script.readConfig('selecta-playlist_length','50'));
 }
 
 SelectaConfig.set_playlist_length=function(length){
@@ -29,7 +29,7 @@ SelectaConfig.set_playlist_length=function(length){
 }
 
 SelectaConfig.get_playlist_diversity=function(){
-	return parseFloat(Amarok.Script.readConfig('selecta-playlist_diversity','13'));	
+	return parseFloat(Amarok.Script.readConfig('selecta-playlist_diversity','10'));	
 }
 
 SelectaConfig.set_playlist_diversity=function(diversity){
