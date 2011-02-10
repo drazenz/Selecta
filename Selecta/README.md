@@ -1,4 +1,4 @@
-**How it really works?**
+**How it really works? **
 
 For each artist in your collection, Selecta uses [Last.fm api](http://www.last.fm/api) method Artist.getTopTags to
 get tag info about that artist. After writing the data to a simple text file, an inverted index
