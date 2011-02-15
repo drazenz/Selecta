@@ -1,11 +1,21 @@
 #Selecta#
+An Amarok script
 
 **Author:** Drazen Zaric <drazen.zaric@gmail.com>
 
 **Homepage:** [http://dzaric.github.com/Selecta/selecta_home_page/](http://dzaric.github.com/Selecta/selecta_home_page/)
 
+##How it works?##
 
-#How it really works? #
+First off, you need to have some music in your Amarok Collection.
+After installing Selecta, you must update its index (go to Tools->Selecta->Update index).
+It takes some time to fetch all the necessary data from Last.fm, about 10 minutes per 500 artists,
+so please be patient.
+Once the the indexing is finished, Selecta is ready to make some playlists for you.
+Drop a couple of tracks into Amarok playlist and hit Tools->Selecta->Play.
+Note: you should update Selecta's index whenever you add new artists to your collection.
+
+##How it really works? ##
 
 For each artist in your collection, Selecta uses [Last.fm api](http://www.last.fm/api) method Artist.getTopTags to
 get tag info about that artist. After writing the data to a simple text file, an inverted index
