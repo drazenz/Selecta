@@ -1,5 +1,4 @@
 #Selecta#
-An Amarok script
 
 **Author:** Drazen Zaric <drazen.zaric@gmail.com>
 
@@ -9,7 +8,6 @@ An Amarok script
 Selecta is an Amarok script that generates playlists of similar artists using Last.fm tags.
 
 ##How it works?##
-
 First off, you need to have some music in your Amarok Collection.
 After installing Selecta, you must update its index (go to Tools->Selecta->Update index).
 It takes some time to fetch all the necessary data from Last.fm, about 10 minutes per 500 artists,
@@ -19,7 +17,6 @@ Drop a couple of tracks into Amarok playlist and hit Tools->Selecta->Play.
 Note: you should update Selecta's index whenever you add new artists to your collection.
 
 ##How it really works? ##
-
 For each artist in your collection, Selecta uses [Last.fm api](http://www.last.fm/api) method Artist.getTopTags to
 get tag info about that artist. After writing the data to a simple text file, an inverted index
 is built, mapping tags to artist names. Since last.fm is kind enough to also deliver 
