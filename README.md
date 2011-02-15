@@ -4,7 +4,7 @@
 
 **Homepage:** [http://dzaric.github.com/Selecta/selecta_home_page/](http://dzaric.github.com/Selecta/selecta_home_page/)
 
-## What is it? ##
+### What is it? ##
 Selecta is an Amarok script that generates playlists of similar artists using Last.fm tags.
 
 ## How it works? ##
