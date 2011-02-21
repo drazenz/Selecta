@@ -46,7 +46,7 @@ Heap.prototype.insert=function(element){
 			curr=parent;				
 		}
 		else{
-			break;sif
+			break;
 		}
 	}		
 }
