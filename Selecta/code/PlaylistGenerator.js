@@ -114,11 +114,6 @@ PlaylistGenerator.prototype.generateForQuery=function(query, length, sigma){
 	
 	//get the number of available songs for artists
 	var track_counts=[];
-	for(var i in similar){
-		
-		
-		
-	}
 	var n_available=[]
 	for(var i in similar){		
 		var artist_name=similar[i][1];
