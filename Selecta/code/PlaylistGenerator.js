@@ -97,7 +97,7 @@ PlaylistGenerator.prototype.generateForQuery=function(query, length, sigma){
 		prob[i]=t;
 	}
 	
-	similar.splice(prob.length);	//throw away those artists with zero probability
+	similar.splice(prob.length);	//throw away artists with zero probability
 	
 	var findInd=function(t,prob){
 		//when t is selected from a distribution with pdf=e^(-(t/sigma)^2)
@@ -180,7 +180,7 @@ PlaylistGenerator.prototype.generateForQuery=function(query, length, sigma){
 	length=actual_length;
 		
 	var shuffle=function(a){
-		//a function to shuffle the given array
+		//shuffle the given array
 		for(var i=0;i<a.length/2+a.length%2;i++){
 			var i1=randInt(a.length-1);
 			var i2=randInt(a.length-1);
